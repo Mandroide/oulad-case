@@ -4,9 +4,12 @@
 
 This is an implementation of EDA and ETL for [OULAD Dataset](https://analyse.kmi.open.ac.uk/#open-dataset).
 
-The environment variables must be modified before running the app
+The environment variables must be modified before running the app.
 
-Basic Structure of the project
+## Diagram
+![Relational Diagram](resources/diagram.svg)
+
+## Basic Structure of the project
 ```
 oulad-case/                   # ── repo root ─────────────────────────────
 ├── pyproject.toml               # Poetry config (deps, tooling, packaging)
