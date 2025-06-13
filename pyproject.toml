@@ -16,6 +16,8 @@ pymysql = "^1.1"                    # MySQL driver for SQLAlchemy
 pydantic = "^2.7"
 python-dotenv = "^1.0"
 pydantic-settings = "^2.9.1"
+requests = "^2.32.4"
+pyyaml = "^6.0.2"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "*"
@@ -27,6 +29,8 @@ ruff = "^0.4"
 mypy = "^1.10"
 pre-commit = "^3.7"
 detect-secrets = "^1.5"
+types-requests = "^2.32.4.20250611"
+types-pyyaml = "^6.0.12.20250516"
 
 [build-system]
 requires = ["poetry-core"]
