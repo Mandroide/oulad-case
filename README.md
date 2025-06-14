@@ -34,7 +34,8 @@ oulad-case/                  # ── project root ─────────�
 │   │   ├── ddl_loader.py       # run *.sql files against MySQL
 │   │   ├── download.py         # fetch + unzip
 │   │   └── load.py             # bulk-insert via SQLAlchemy or MySQL cursor
-│   │   └── models.py             # enums of columns of each model
+│   │   └── models.py           # enums of columns of each model
+│   │   └── summary.py          # contains method with raw summary stats
 │   │   ├── transform.py        # tidy up (pandas)
 │   └── cli.py                  # `poetry run oulad-etl …`
 ├── tests/
