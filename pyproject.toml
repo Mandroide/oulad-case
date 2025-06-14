@@ -11,13 +11,14 @@ python = "^3.12"
 pandas = "^2.2"
 numpy = "^2.0"
 pyarrow = "^20.0"
-sqlalchemy = { extras = ["asyncio"], version = "^2.0" }
-pymysql = "^1.1"                    # MySQL driver for SQLAlchemy
-pydantic = "^2.7"
-python-dotenv = "^1.0"
+sqlalchemy = {extras = ["mysql"], version = "^2.0"}  # or use mysql-connector-python
+mysql-connector-python = "^9.3.0"
 pydantic-settings = "^2.9.1"
-requests = "^2.32.4"
+python-dotenv = "^1.0"
 pyyaml = "^6.0.2"
+rich = "^14.0.0"
+requests = "^2.32.4"
+tabulate = "^0.9.0"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "*"
@@ -31,6 +32,10 @@ pre-commit = "^3.7"
 detect-secrets = "^1.5"
 types-requests = "^2.32.4.20250611"
 types-pyyaml = "^6.0.12.20250516"
+types-tabulate = "^0.9.0.20241207"
+
+[tool.poetry.scripts]
+etl = "oulad_etl.cli:cli"
 
 [build-system]
 requires = ["poetry-core"]
