@@ -3,14 +3,14 @@ import pathlib
 import pandas as pd
 
 from oulad_etl.etl.models import (
-    CoursesSchema,
-    StudentInfo,
     Assessments,
-    Vle,
+    CoursesSchema,
     StudentAssessment,
+    StudentInfo,
     StudentRegistration,
     StudentVle,
     TablesSchema,
+    Vle,
 )
 from oulad_etl.log import log
 
@@ -101,6 +101,9 @@ def clean(
             df_student_info[field].mode()[0]
         )
 
+    df_student_info[StudentInfo.imd_band] = df_student_info[
+        StudentInfo.imd_band
+    ].replace("10-20", "10-20%")
     df_student_info[StudentInfo.num_of_prev_attempts] = df_student_info[
         StudentInfo.num_of_prev_attempts
     ].fillna(df_student_info[StudentInfo.num_of_prev_attempts].median())
@@ -163,7 +166,7 @@ def clean(
     dataframes[TablesSchema.vle] = df_vle
     log.debug(f"  - 'vle' limpio. Shape: {df_vle.shape}")
 
-    log.info("Proceso de limpieza de datos completado.")
+    log.info("Proceso de limpieza de datos completado. ✅")
 
     # --- 4. Guardar los DataFrames limpios en la nueva carpeta ---
     log.info(f"Guardando los datasets limpios en la carpeta: '{target}'...")
@@ -174,7 +177,7 @@ def clean(
         )  # index=False para no guardar el índice de pandas
         log.debug(f"  - '{df_name}.csv' guardado.")
 
-    log.info("¡Todos los datasets limpios han sido guardados con éxito!")
+    log.info("¡Todos los datasets limpios han sido guardados con éxito! ✅")
     return dataframes
 
 
