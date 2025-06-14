@@ -55,10 +55,14 @@ cd oulad-case
 cp .env.example .env          # customise creds
 poetry install
 pre-commit install
+poetry run ipython kernel install --user --name eda_overview
+```
+
+### Run the ETL and EDA pipeline
+```bash
 poetry run etl run
 poetry run jupyter lab --notebook-dir notebooks
 ```
-
 
 ## References
 
