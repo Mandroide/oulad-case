@@ -47,6 +47,15 @@ oulad-case/                  # ── project root ─────────�
 ├── pyproject.toml              # Poetry deps & tooling
 ├── README.md
 ```
+## Requirements
+-  [Poetry](https://python-poetry.org/docs/#installation)
+
+To install poetry through pip run:
+
+```bash
+pip install poetry
+```
+
 ## Quick start
 
 ### Boostrap the app
@@ -55,7 +64,7 @@ git clone <repo-url>
 cd oulad-case
 cp .env.example .env          # customise creds
 poetry install
-pre-commit install
+poetry run pre-commit install
 poetry run ipython kernel install --user --name eda_overview
 ```
 
