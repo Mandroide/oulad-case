@@ -1,6 +1,16 @@
 from enum import StrEnum
 
 
+class TablesSchema(StrEnum):
+    assessments = "assessments"
+    courses = "courses"
+    studentAssessment = "studentAssessment"
+    studentInfo = "studentInfo"
+    studentRegistration = "studentRegistration"
+    studentVle = "studentVle"
+    vle = "vle"
+
+
 class CoursesSchema(StrEnum):
     code_module = "code_module"
     code_presentation = "code_presentation"
@@ -20,6 +30,11 @@ class StudentInfo(StrEnum):
     studied_credits = "studied_credits"
     disability = "disability"
     final_result = "final_result"
+    # Ordinals
+    highest_education_ord = "highest_education_ord"
+    age_band_ord = "age_band_ord"
+    imd_band_ord = "imd_band_ord"
+    final_result_ord = "final_result_ord"
 
 
 class Assessments(StrEnum):

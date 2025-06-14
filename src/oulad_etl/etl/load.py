@@ -4,6 +4,8 @@ import sys
 import pandas as pd
 import sqlalchemy as sa
 import logging
+
+from .models import TablesSchema
 from ..settings import settings
 
 engine = sa.create_engine(
@@ -21,13 +23,13 @@ def load_raw(target: pathlib.Path) -> dict[str, pd.DataFrame]:
     """
     dataset = {}
     csv_tablas = {
-        "assessments.csv": "assessments",
-        "courses.csv": "courses",
-        "studentAssessment.csv": "studentAssessment",
-        "studentInfo.csv": "studentInfo",
-        "studentRegistration.csv": "studentRegistration",
-        "studentVle.csv": "studentVle",
-        "vle.csv": "vle",
+        f"{TablesSchema.courses}.csv": TablesSchema.courses,
+        f"{TablesSchema.studentInfo}.csv": TablesSchema.studentInfo,
+        f"{TablesSchema.assessments}.csv": TablesSchema.assessments,
+        f"{TablesSchema.vle}.csv": TablesSchema.vle,
+        f"{TablesSchema.studentAssessment}.csv": TablesSchema.studentAssessment,
+        f"{TablesSchema.studentRegistration}.csv": TablesSchema.studentRegistration,
+        f"{TablesSchema.studentVle}.csv": TablesSchema.studentVle,
     }
     for file_name in csv_tablas:
         file_path = target / file_name
@@ -36,7 +38,7 @@ def load_raw(target: pathlib.Path) -> dict[str, pd.DataFrame]:
                 ".csv", ""
             )  # Nombre del DataFrame sin la extensión .csv
             dataset[df_name] = pd.read_csv(file_path)
-            print(f"  - '{file_name}' cargado como '{df_name}'")
+            log.debug(f"  - '{file_name}' cargado como '{df_name}'")
         except FileNotFoundError:
             logging.error("Expected %s not found", file_path)
             sys.exit(1)
@@ -57,3 +59,9 @@ def bulk_insert(dataset: dict[str, pd.DataFrame]) -> None:
             log.info(f" Datos insertados en la tabla '{relation}' desde '{relation}'")
         except Exception as e:
             log.error(f" Error al insertar '{relation}' en la tabla '{relation}': {e}")
+
+
+def save_to_csv(df: pd.DataFrame, target_file_path: pathlib.Path) -> None:
+    # Guardar resultado
+    df.to_csv(target_file_path, index=False)
+    log.info(f"Archivo ETL guardado correctamente en: {target_file_path}")
