@@ -165,13 +165,14 @@ CREATE TABLE IF NOT EXISTS `oulad`.`studentRegistration`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `oulad`.`studentVle`
 (
+    `id_student_vle`           INT     NOT NULL AUTO_INCREMENT,
     `id_site`           INT     NOT NULL,
     `id_student`        INT     NOT NULL,
     `code_module`       CHAR(3) NOT NULL,
     `code_presentation` CHAR(5) NOT NULL,
     `date`              INT     NULL,
     `sum_click`         INT     NULL,
-    PRIMARY KEY (`id_site`, `id_student`, `code_module`, `code_presentation`),
+    PRIMARY KEY (`id_student_vle`),
     INDEX `fk_studentVle_studentInfo1_idx` (`code_module` ASC, `code_presentation` ASC, `id_student` ASC) VISIBLE,
     CONSTRAINT `fk_studentVle_vle1`
         FOREIGN KEY (`id_site`)
