@@ -74,5 +74,9 @@ poetry run etl run
 poetry run jupyter lab --notebook-dir notebooks
 ```
 
-## References
+### Meeting video
+- [[Colab. 04 - Peter Naur - Bayesiano] Caso práctico 3 OULAD-Meeting Recording.mp4](https://bit.ly/3ZxL5Sj)
+
+> [!TIP]
+> You must have access to be able to watch the video.
 
