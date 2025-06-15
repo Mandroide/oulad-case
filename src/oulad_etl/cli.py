@@ -3,50 +3,58 @@ import pathlib
 import click
 
 from oulad_etl.etl.models import TablesSchema
+
+from .etl import ddl_loader, download, load, summary, transform
 from .log import log  # global logging setup
-from .etl import download, ddl_loader, transform, load, summary
 
 
 @click.group()
-def cli():
-    # This is a grouping method
+def cli() -> None:
+    """Run `poetry run etl --help` for sub-commands."""
     pass
 
 
-@cli.command()
-@click.option(
-    "--data-dir", default="data/raw", show_default=True, help="Data raw directory"
-)
-def run(data_dir: str):
+@cli.command("ddl-apply", help="Apply DDL scripts only.")
+def ddl_apply() -> None:
     ddl_loader.apply_ddl()
-    target_raw_path = download.fetch_zip(pathlib.Path(data_dir))
+    log.info("DDL applied ✅")
 
-    dataframes = load.load_raw(target_raw_path)
-    summary.raw_summary(dataframes)
 
-    target_processed_path = target_raw_path.with_name("processed")
-    dataframes = transform.clean(dataframes, target_processed_path)
-    load.bulk_insert(dataframes)
+@cli.command(help="Run the full pipeline (download → transform → load).")
+@click.option("--data-dir", default="data/raw", show_default=True)
+def run(data_dir: str) -> None:
+    raw_path = pathlib.Path(data_dir)
+    processed_path = raw_path.parent / "processed"
+    raw_path.mkdir(parents=True, exist_ok=True)
+    processed_path.mkdir(parents=True, exist_ok=True)
+
+    target_raw_path = download.download_oulad(raw_path)
+
+    dfs = load.load_raw(target_raw_path)
+    summary.generate_report(dfs)
+
+    dfs = transform.clean(dfs, processed_path)
 
     # Merge
     df_etl = transform.merge(
-        df_student_assessment=dataframes[TablesSchema.studentAssessment],
-        df_assessments=dataframes[TablesSchema.assessments],
-        df_student_info=dataframes[TablesSchema.studentInfo],
+        df_student_assessment=dfs[TablesSchema.studentAssessment],
+        df_assessments=dfs[TablesSchema.assessments],
+        df_student_info=dfs[TablesSchema.studentInfo],
     )
 
-    load.save_to_csv(
-        df=df_etl, target_file_path=target_processed_path / "etl_output.csv"
-    )
+    load.save_to_csv(df=df_etl, target_file_path=processed_path / "etl_output.csv")
 
     # Encode studentInfo fields as ordinals
-    dataframes[TablesSchema.studentInfo] = transform.encode_as_ordinal(
-        dataframes[TablesSchema.studentInfo]
+    dfs[TablesSchema.studentInfo] = transform.encode_as_ordinal(
+        dfs[TablesSchema.studentInfo]
     )
     load.save_to_csv(
-        df=dataframes[TablesSchema.studentInfo],
-        target_file_path=target_processed_path / "studentInfo_ordinal.csv",
+        df=dfs[TablesSchema.studentInfo],
+        target_file_path=processed_path / "studentInfo_ordinal.csv",
     )
+
+    ddl_loader.apply_ddl()
+    load.bulk_insert(dfs)
 
     log.info("Pipeline completed ✅")
 

@@ -9,7 +9,7 @@ def describe(df: pd.DataFrame) -> pd.DataFrame:
     return df.describe(include="all")
 
 
-def raw_summary(dataset: dict[str, pd.DataFrame]) -> None:
+def generate_report(dataset: dict[str, pd.DataFrame]) -> None:
     """Return raw summary stats."""
     summary_data = []
     for table_name, df in dataset.items():
